@@ -11,12 +11,46 @@ namespace Rescues
 
         private PhysicsService _physicsService;
         private Vector3 _visionDirection;
+        private Animator _animator;
 
         private void Awake()
         {
             _physicsService = Services.SharedInstance.PhysicsService;
             _timeRemaining = new TimeRemaining (ResetWaitState, 0.0f);
+            _animator = GetComponent<Animator>();
             EnemyData.StateEnemy = StateEnemy.None;
+        }
+
+        private void Update()
+        {
+            switch (GetWaitState())
+            {
+                case StateEnemy.None: 
+                    {
+                        _animator.Play("Base Layer.None");
+                        break;
+                    }
+                case StateEnemy.Patrol:
+                    {
+                        _animator.Play("Base Layer.Patrol");
+                        break;
+                    }
+                case StateEnemy.Inspection:
+                    {
+                        _animator.Play("Base Layer.Inspection");
+                        break;
+                    }
+                case StateEnemy.Detected:
+                    {
+                        _animator.Play("Base Layer.Detected");
+                        break;
+                    }
+                case StateEnemy.Dead:
+                    {
+                        _animator.Play("Base Layer.Dead");
+                        break;
+                    }
+            }
         }
 
         public int Modificator { get => _modificator; }

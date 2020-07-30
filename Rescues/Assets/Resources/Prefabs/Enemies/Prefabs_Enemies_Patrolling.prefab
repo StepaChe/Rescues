@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 486286229305585546}
   - component: {fileID: 1003408284798626869}
   - component: {fileID: 3984213783059721231}
+  - component: {fileID: -6495977285686339086}
   m_Layer: 0
   m_Name: Prefabs_Enemies_Patrolling
   m_TagString: Untagged
@@ -98,4 +99,22 @@ MonoBehaviour:
   EnemyData: {fileID: 11400000, guid: 2aa8840412f9c9943aea7dfe3f6feaa8, type: 2}
   PatrolPointState: 0
   RouteData: {fileID: 11400000, guid: de1b2b09a93a9784c860eca665a1f313, type: 2}
-  _stateEnemy: 0
+--- !u!95 &-6495977285686339086
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4426639306793738693}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a1e475cdd34252542b9fa5c37842e54e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

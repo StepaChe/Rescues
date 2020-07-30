@@ -45,6 +45,20 @@ namespace Rescues
             return true;
         }
 
+        public void PlayerVision(Vector3 position, Vector2 direction, float rayLength, BoxCollider2D box)
+        {
+            RaycastHit2D hit;
+            hit = Physics2D.Raycast(position, direction, rayLength, LayerManager.ViewObstacle);
+            if (hit.collider != null)
+            {
+                if (hit.collider.CompareTag(TagManager.VIEWOBSTACLE))
+                {
+                    box.enabled = false;
+                }
+            }
+            else box.enabled = true;
+        }
+
         public bool VisionDetectionPlayer(Vector3 rayOriginPosition, Vector3 rayTargetDirection, float detectionDistance)
         {
             int layerMask = LayerManager.PlayerLayer;

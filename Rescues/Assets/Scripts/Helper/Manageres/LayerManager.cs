@@ -15,6 +15,7 @@ namespace Rescues
         private const string GROUND = "Ground";
         private const string UI = "UI";
         private const string PLAYER = "Player";
+        private const string VIEWOBSTAClE = "ViewObstacle";
 
         public const int DEFAULT_LAYER = 1;
 
@@ -31,6 +32,7 @@ namespace Rescues
         public static int UiLayer { get; }
         public static int NonCollidableLayer { get; }
         public static int PlayerLayer { get; }
+        public static int ViewObstacle { get; }
 
         #endregion
 
@@ -47,6 +49,7 @@ namespace Rescues
             UiLayer = LayerMask.GetMask(UI);
             NonCollidableLayer = LayerMask.NameToLayer(NON_COLLIDABLE);
             PlayerLayer = LayerMask.GetMask(PLAYER);
+            ViewObstacle = LayerMask.GetMask(VIEWOBSTAClE);
         }
 
         #endregion

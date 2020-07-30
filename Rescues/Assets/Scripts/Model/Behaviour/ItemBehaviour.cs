@@ -8,6 +8,7 @@ namespace Rescues
         #region Fields
         
         public ItemData ItemData;
+        public float PickUpTime = 0.5f;
 
         #endregion
     }

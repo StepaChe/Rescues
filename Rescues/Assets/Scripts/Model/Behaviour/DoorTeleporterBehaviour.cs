@@ -8,6 +8,7 @@ namespace Rescues
         #region Fields
 
         [SerializeField] public Transform ExitPoint;
+        [SerializeField] public float TransferTime = 2f;
         private ITrigger _triggerImplementation;
 
         #endregion

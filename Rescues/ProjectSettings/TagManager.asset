@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FogOfWar
+  - ViewObstacle
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - First Floor
   - Second Floor
   - Player
-  - 
+  - ViewObstacle
   - 
   - 
   - 

@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e25b726979d47d99d1905434fdceae7, type: 3}
   m_Name: KillingTrapData
   m_EditorClassIdentifier: 
-  IsActive: 0
-  _needItems: []
-  _craftingTrap: {fileID: 0}
+  IsActive: 1
+  CraftingTime: 1

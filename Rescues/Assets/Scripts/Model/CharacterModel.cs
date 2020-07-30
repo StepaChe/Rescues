@@ -13,10 +13,11 @@ namespace Rescues
         private CapsuleCollider2D _playerCollider;
         private Rigidbody2D _playerRigidbody2D;
         private State _state;
-        public Timer AnimationPlay;
+        public Timer AnimationPlayTimer;
         private Vector2 _direction;
         private Vector3 _teleportPosition;
         private HidingPlaceBehaviour _hidingPlaceBehaviour;
+        private Animator _animator;        
 
         #endregion
 
@@ -28,6 +29,7 @@ namespace Rescues
         public AudioSource PlayerSound { get; }
         public float AnimationTimer { get; set; }
         public State PlayerState { get { return _state; } }
+        public InteractableObjectBehavior InteractableItem { get; set; }
 
         #endregion
 
@@ -40,7 +42,8 @@ namespace Rescues
             _characterSprite = transform.GetComponent<SpriteRenderer>();
             _playerCollider = transform.GetComponent<CapsuleCollider2D>();
             _playerRigidbody2D = transform.GetComponent<Rigidbody2D>();
-            AnimationPlay = new Timer();
+            _animator = transform.GetComponent<Animator>();
+            AnimationPlayTimer = new Timer();
             Transform = transform;
             PlayerSound = Transform.GetComponent<AudioSource>();
             PlayerBehaviour = Transform.GetComponent<PlayerBehaviour>();
@@ -55,49 +58,55 @@ namespace Rescues
         public void StateIdle()
         {
             SetState(State.Idle);
+            _animator.Play("Base Layer.Idle");
         }
 
         public void StateHideAnimation(HidingPlaceBehaviour hidingPlaceBehaviour)
         {
-            switch (_state)
-            {
-                case State.Hiding:
-                    {
-                        StartHiding();
-                        return;
-                    }                   
-            }
-            SetState(State.HideAnimation);
             if (hidingPlaceBehaviour != null)
             {
                 _hidingPlaceBehaviour = hidingPlaceBehaviour;
-            }
+            }           
+            SetState(State.HideAnimation);                                           
             StartHiding();
+            _animator.Play("Base Layer.HideAnimation");
         }
 
         public void StateHiding()
-        {
-            switch (_state)
+        {                            
+            if (Hide())
             {
-                case State.HideAnimation:
-                    {
-                        Hide();
-                    }
-                    break;
-                case State.Hiding:
-                    {
-                        StateIdle();
-                        Hide();
-                        return;
-                    }                   
+                _animator.Play("Base Layer.Hiding");
+                SetState(State.Hiding);                             
             }
-            SetState(State.Hiding);
+            else
+            {
+                StateIdle();                
+            }
         }
 
-        public void StateTeleporting(Vector3 position)
+        public void StatePickUpAnimation(ItemBehaviour itemBehaviour)
+        {
+            InteractableItem = itemBehaviour;
+            SetState(State.PickUpAnimation);
+            _animator.Play("Base Layer.PickUpAnimation");
+            AnimationPlayTimer.StartTimer(itemBehaviour.PickUpTime);           
+        }
+
+        public void StateCraftTrapAnimation(TrapBehaviour trapBehaviour)
+        {
+            InteractableItem = trapBehaviour;
+            SetState(State.CraftTrapAnimation);
+            _animator.Play("Base Layer.CraftTrapAnimation");
+            AnimationPlayTimer.StartTimer(trapBehaviour.TrapInfo.BaseTrapData.CraftingTime);
+        }
+
+        public void StateTeleporting(DoorTeleporterBehaviour doorTeleporterBehaviour)
         {
             SetState(State.Teleporting);
-            _teleportPosition = position;
+            _animator.Play("Base Layer.Teleporting");
+            _teleportPosition = doorTeleporterBehaviour.ExitPoint.position;
+            AnimationPlayTimer.StartTimer(doorTeleporterBehaviour.TransferTime);
         }
 
         public void StateMoving(Vector2 direction)
@@ -105,37 +114,46 @@ namespace Rescues
             switch (_state)
             {
                 case State.Hiding:
-                    {
+                    {                       
                         return;
                     }
                 case State.HideAnimation:
+                    {                        
+                        return;
+                    }
+                case State.PickUpAnimation:
+                    {
+                        return;
+                    }
+                case State.CraftTrapAnimation:
+                    {
+                        return;
+                    }
+                case State.Teleporting:
                     {
                         return;
                     }
             }
             SetState(State.Moving);
+            _animator.Play("Base Layer.Moving");
             _direction = direction;
         }
 
         private void SetState(State value)
-        {           
+        {
             _state = value;
         }
 
         public void StateHandler()
         {
+            CustomDebug.Log(PlayerState);
             switch (_state)
-            {               
-                case State.Teleporting:
-                    {
-                        Teleport();
-                    }
-                    break;
+            {                              
                 case State.Moving:
                     {
                         Move();
-                    }
-                    break;
+                        break;
+                    }                   
             }
         }
 
@@ -144,26 +162,44 @@ namespace Rescues
 
         #region Methods 
 
-        private void Teleport()
+        public void Teleport()
         {
             Transform.position = _teleportPosition;
         }
 
         private void StartHiding()
-        {           
+        {
             PlayerSound.clip = _hidingPlaceBehaviour.HidingPlaceData.HidingSound;
-            AnimationTimer = _hidingPlaceBehaviour.HidingPlaceData.AnimationDuration;
+            AnimationTimer = _hidingPlaceBehaviour.HidingPlaceData.AnimationDuration;         
             PlayAnimationWithTimer();
+            if (_playerRigidbody2D.bodyType == RigidbodyType2D.Dynamic)
+            {
+                _characterSprite.enabled = false; //чтобы спрайт выключался сразу, когда идет процесс пряток
+            }
+            else
+            {
+                _hidingPlaceBehaviour.HidedSprite.enabled = false; //чтобы спрайт хайдинг плейс бехевора выключался сразу, когда персонаж начинает вылезать
+            }
         }
 
-        private void Hide()
-        {            
-            _playerCollider.enabled = !_playerCollider.enabled;
+        private bool Hide()
+        {
+            bool isHided;
+            _playerCollider.enabled = !_playerCollider.enabled;          
             if (_playerRigidbody2D.bodyType == RigidbodyType2D.Dynamic)
             {
                 _playerRigidbody2D.bodyType = RigidbodyType2D.Static;
+                isHided = true;
+                _hidingPlaceBehaviour.HidedSprite.enabled = true; //чтобы спрайт хайдинг плейс бехевора включался только тогда, когда персонаж спрятался
             }
-            else _playerRigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+            else
+            {
+                _playerRigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+                isHided = false;
+                _characterSprite.enabled = true; //чтобы спрайт выключался только тогда, когда персонаж уже вылез
+            }
+
+            return isHided;
         }
 
         private void PlayAnimationWithTimer()
@@ -171,9 +207,8 @@ namespace Rescues
             if (PlayerSound.clip != null)
             {
                 PlayerSound.Play();
-            }
-            Debug.Log(AnimationTimer);
-            AnimationPlay.StartTimer(AnimationTimer);
+            }          
+            AnimationPlayTimer.StartTimer(AnimationTimer);
         }
 
         private void Move()
@@ -182,13 +217,18 @@ namespace Rescues
 
             Transform.Translate(_direction);
 
+            if (_direction.x == 0)
+            {
+                StateIdle();               
+            }
+
             if (_direction.x > 0 && _characterSprite.flipX)
             {
-                Flip();
+                Flip();               
             }
             else if (_direction.x < 0 && !_characterSprite.flipX)
             {
-                Flip();
+                Flip();            
             }
         }
 
