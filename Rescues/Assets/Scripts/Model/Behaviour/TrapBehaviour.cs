@@ -1,11 +1,18 @@
-﻿using UnityEngine;
-
-
 namespace Rescues
 {
-    public class TrapBehaviour : InteractableObjectBehavior
+    public sealed class TrapBehaviour : InteractableObjectBehavior
     {
-        [SerializeField] private TrapData _trapData;       
+        public TrapInfo TrapInfo;
 
+        private void Start()
+        {
+            TrapInfo.BaseTrapData.IsActive = false;
+        }
+
+        public void CreateTrap()
+        {
+            TrapInfo.BaseTrapData.IsActive = true;
+            CustomDebug.Log("Trap Active");
+        }
     }
 }

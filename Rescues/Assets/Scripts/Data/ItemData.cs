@@ -9,7 +9,9 @@ namespace Rescues
         #region Fields
         
         public string Name;
-        [TextArea(5,5)] public string Discription;
+        [TextArea(5,5)] public string Description;
+        public Sprite Icon;
+        public bool IsDestructuble = true;
 
         #endregion
     }

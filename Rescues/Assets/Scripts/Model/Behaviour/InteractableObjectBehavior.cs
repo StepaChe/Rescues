@@ -20,6 +20,7 @@ namespace Rescues
         public Action<ITrigger> OnTriggerExitHandler { get; set; }
         public Action<ITrigger, InteractableObjectType> DestroyHandler { get; set; }
         public bool IsInteractable { get; set; }
+        public string Description { get; set; }
         public GameObject GameObject => gameObject;
         public InteractableObjectType Type { get => _type; }
 

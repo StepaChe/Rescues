@@ -8,7 +8,7 @@ namespace Rescues
     {
         #region Fields
 
-        private const int COLLIDEDOBJECTSIZE = 20;
+        private const int COLLIDED_OBJECT_SIZE = 20;
 
         private readonly Collider2D[] _collidedObjects;
         private readonly RaycastHit2D[] _castBuffer;
@@ -21,7 +21,7 @@ namespace Rescues
 
         public PhysicsService(Contexts contexts) : base(contexts)
         {
-            _collidedObjects = new Collider2D[COLLIDEDOBJECTSIZE];
+            _collidedObjects = new Collider2D[COLLIDED_OBJECT_SIZE];
             _castBuffer = new RaycastHit2D[64];
             _triggeredObjects = new List<ITrigger>();
         }
@@ -31,7 +31,7 @@ namespace Rescues
         
         #region Methods
 
-        public bool CheckGround(Vector2 position, float distanceRay, out Vector2 hitPoint, int layerMask = LayerManager.DEFAULTLAYER)
+        public bool CheckGround(Vector2 position, float distanceRay, out Vector2 hitPoint, int layerMask = LayerManager.DEFAULT_LAYER)
         {
             hitPoint = Vector2.zero;
 
@@ -44,8 +44,16 @@ namespace Rescues
             hitPoint = hit.point;
             return true;
         }
-        
-        public List<ITrigger> GetObjectsInRadius(Vector2 position, float radius, int layerMask = LayerManager.DEFAULTLAYER)
+
+        public bool VisionDetectionPlayer(Vector3 rayOriginPosition, Vector3 rayTargetDirection, float detectionDistance)
+        {
+            int layerMask = LayerManager.PlayerLayer;
+            RaycastHit2D hit = Physics2D.Raycast(rayOriginPosition, rayTargetDirection, detectionDistance, layerMask);
+            Debug.DrawRay(rayOriginPosition, rayTargetDirection * detectionDistance, Color.red);
+            return hit;
+        }
+
+        public List<ITrigger> GetObjectsInRadius(Vector2 position, float radius, int layerMask = LayerManager.DEFAULT_LAYER)
         {
             _triggeredObjects.Clear();
             ITrigger trigger;
@@ -66,7 +74,7 @@ namespace Rescues
         }
         
         public HashSet<ITrigger> SphereCastObject(Vector2 center, float radius, HashSet<ITrigger> outBuffer,
-            int layerMask = LayerManager.DEFAULTLAYER)
+            int layerMask = LayerManager.DEFAULT_LAYER)
         {
             outBuffer.Clear();
 

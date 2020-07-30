@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0220fae6cd4f9d447abc43f7b985cddb, type: 3}
+  m_Name: BlackGuyRoute
+  m_EditorClassIdentifier: 
+  _wayPoints:
+  - TrapInfo:
+      BaseTrapData: {fileID: 0}
+      RequiredTrapItem: {fileID: 0}
+    PointPosition: {x: 34.1, y: 0.86, z: 0}
+    WaitTime: 0
+  - TrapInfo:
+      BaseTrapData: {fileID: 11400000, guid: 70c0692b0d45ae84eaf66c530d8e5ff6, type: 2}
+      RequiredTrapItem: {fileID: 0}
+    PointPosition: {x: -2.47, y: 0.86, z: 0}
+    WaitTime: 4
+  - TrapInfo:
+      BaseTrapData: {fileID: 0}
+      RequiredTrapItem: {fileID: 0}
+    PointPosition: {x: 15.92, y: 0.86, z: 0}
+    WaitTime: 2
