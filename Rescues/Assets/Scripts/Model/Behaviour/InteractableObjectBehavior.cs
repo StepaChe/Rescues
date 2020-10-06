@@ -47,7 +47,8 @@ namespace Rescues
 
         private void OnDisable()
         {
-            DestroyHandler.Invoke(this, _type);
+            DestroyHandler.Invoke(this, _type
+            );
         }
 
         #endregion

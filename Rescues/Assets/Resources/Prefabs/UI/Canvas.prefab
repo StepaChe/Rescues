@@ -984,7 +984,9 @@ MonoBehaviour:
   - {fileID: 3988145765733874528}
   - {fileID: 3988145766625562362}
   - {fileID: 3988145767141886969}
+  CraftableItemsList: []
   _draggableItem: {fileID: 3988145765470620482}
+  _inventoryTooltip: {fileID: 0}
 --- !u!1 &3988145767241354793
 GameObject:
   m_ObjectHideFlags: 0

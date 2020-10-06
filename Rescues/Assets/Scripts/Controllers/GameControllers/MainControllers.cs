@@ -12,6 +12,7 @@
             Add(new TimeRemainingController());
             Add(new ItemActiveController(context, services));
             Add(new DoorTeleporterController(context, services));
+            Add(new MainPuzzleController(context, services));
             Add(new HidingPlaceController(context, services));
             Add(new EnemyVisionController(context, services));
             Add(new EnemyMoveController(context, services));
